@@ -2,4 +2,22 @@
     <string name="app_name">Weekuk</string>
     <string name="next">NEXT</string>
     <string name="start">Get Started</string>
+    <string name="txt_login_email">Email</string>
+    <string name="txt_login_pwd">Password</string>
+    <string name="txt_signin">LOGIN</string>
+    <string name="txt_forgotlogin_gethelptxt">Forgot your Password? Get help <a href="actual url">Signing in</a></string>
+    <string name="txt_or">OR</string>
+    <string name="txt_accntsignup">Don\'t have an account? <a href="actual url">Sign up</a></string>
+    <string name="facebook_app_id">224934658167885</string>
+    <string name="fb_login_protocol_scheme">fb224934658167885</string>
+    <string name="txt_fblogin">Log in with Facebook</string>
+    <string name="txt_googlelogin">Log in with Google</string>
+
+    <string name="tnc">TERMS &amp; CONDITIONS</string>
+    <string name="tncfullText">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer gravida, nisi non fringilla volutpat, diam velit ultrices est, sed vulputate nunc neque eget neque. Integer semper dui at turpis tempus vulputate. Cras a ex purus. Ut tincidunt dui non eros accumsan elementum. Nulla in interdum quam. Phasellus malesuada sagittis justo sit amet euismod. Curabitur sollicitudin leo sit amet tempor ultrices. Pellentesque tempor diam massa, at fermentum augue aliquam porttitor. Maecenas et risus sit amet enim hendrerit venenatis vel non mi. In dolor sem, ullamcorper ut leo sed, vehicula efficitur arcu. Aliquam congue lacus ut mauris elementum, finibus viverra felis imperdiet. Curabitur hendrerit mi ac lectus porta, quis vehicula leo aliquam. Cras bibendum urna ac ligula posuere maximus. Sed vel pellentesque quam. Praesent massa libero, fermentum a ultricies sed, volutpat id lorem.
+        \nMaecenas sagittis turpis non nisi egestas, in dignissim urna vulputate. Phasellus vehicula enim a sapien bibendum rutrum. Fusce dapibus massa id magna accumsan, sed rutrum lorem commodo. Etiam faucibus in orci iaculis consequat. In porta nibh id nibh sodales commodo. In auctor ipsum gravida, scelerisque enim quis, consequat tellus. Vivamus vitae ipsum non diam vulputate volutpat. Suspendisse aliquam felis convallis, tempor felis vel, venenatis purus.
+        \nAenean odio mi, varius et tempus sit amet, finibus at ipsum. Donec elementum at felis quis dictum. Pellentesque luctus tortor eu nunc sodales, et rhoncus metus congue. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla varius ac sem sed molestie. Nam sed tempor justo. Curabitur laoreet turpis nec suscipit bibendum. Nulla accumsan tincidunt ante, vel sagittis urna vulputate in. Donec in augue nibh. Phasellus sodales nibh tincidunt elementum elementum. Aliquam ac elementum elit. Vestibulum sed est nibh. Suspendisse rutrum eget sem id ultricies. Praesent sit amet elementum est. Proin ac nisi nec justo mattis condimentum et sed urna.
+    </string>
+
 </resources>

@@ -7,7 +7,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+public class mainActivity extends AppCompatActivity {
 
     private Boolean firstTime = null;
     private static int SPLASH_TIME = 3000; //3 seconds
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     //Do any action here. Now we are moving to next page
-                    Intent mySuperIntent = new Intent(MainActivity.this, tutorialactivity.class);
+                    Intent mySuperIntent = new Intent(mainActivity.this, tutorialactivity.class);
                     startActivity(mySuperIntent);
                     /* This 'finish()' is for exiting the app when back button pressed */
                     finish();

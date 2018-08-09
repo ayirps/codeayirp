@@ -1,6 +1,7 @@
 package com.priya.ck.weekuk;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -50,7 +51,7 @@ public class tutorialactivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_tutorial);
 
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager = (ViewPager) findViewById(R.id.tutview_pager);
         btnNext = (Button) findViewById(R.id.btn_next);
 
         // layouts of all welcome sliders
@@ -85,7 +86,7 @@ public class tutorialactivity extends AppCompatActivity {
                     viewPager.setCurrentItem(current);
                 } else {
                     timer.cancel(); //stop autoscroll on case 1: button click at last tutorial page
-                    //launchLoginScreen();
+                    launchLoginScreen();
                 }
             }
         });
@@ -97,7 +98,7 @@ public class tutorialactivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void addBottomDots(int currentPage) {
+   /* private void addBottomDots(int currentPage) {
         dots = new TextView[layouts.length];
 
         int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
@@ -114,17 +115,16 @@ public class tutorialactivity extends AppCompatActivity {
 
         if (dots.length > 0)
             dots[currentPage].setTextColor(colorsActive[currentPage]);
-    }
+    }*/
 
     private int getItem(int i) {
         return viewPager.getCurrentItem() + i;
     }
 
-    /*private void launchHomeScreen() {
-        //prefManager.setFirstTimeLaunch(false);
-        startActivity(new Intent(tutorialactivity.this, MainActivity.class));
+    private void launchLoginScreen() {
+        startActivity(new Intent(tutorialactivity.this, initialLogin.class));
         finish();
-    }*/
+    }
 
     //  viewpager change listener
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {

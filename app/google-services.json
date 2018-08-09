@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "916353566652",
+    "firebase_url": "https://weekukpriya.firebaseio.com",
+    "project_id": "weekukpriya",
+    "storage_bucket": "weekukpriya.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916353566652:android:7b12a78bea11e9ce",
+        "android_client_info": {
+          "package_name": "com.priya.ck.weekuk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916353566652-pjcbmfvs2p8pkc25r40fpfq2eoptsm6q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.priya.ck.weekuk",
+            "certificate_hash": "0b4da7b1fc19fdf049edcbe57ba32a1fbf56094a"
+          }
+        },
+        {
+          "client_id": "916353566652-i63vno3nisdd9qeh1ed9qvjrkqutda56.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrTsVkGrSEdOQzZOUlsrXRId9S9StxYyY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "916353566652-i63vno3nisdd9qeh1ed9qvjrkqutda56.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
