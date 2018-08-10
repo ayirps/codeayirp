@@ -4,10 +4,13 @@
     <string name="start">Get Started</string>
     <string name="txt_login_email">Email</string>
     <string name="txt_login_pwd">Password</string>
-    <string name="txt_signin">LOGIN</string>
+    <string name="txt_login">LOGIN</string>
+    <string name="txt_signup">SIGN UP</string>
     <string name="txt_forgotlogin_gethelptxt">Forgot your Password? Get help <a href="actual url">Signing in</a></string>
     <string name="txt_or">OR</string>
     <string name="txt_accntsignup">Don\'t have an account? <a href="actual url">Sign up</a></string>
+    <string name="txt_contactsupport">Trouble Signing Up?<a href="actual url">Contact Support</a></string>
+    <string name="txt_alreadysignin">Already have an account <a href="actual url">Sign in</a></string>
     <string name="facebook_app_id">224934658167885</string>
     <string name="fb_login_protocol_scheme">fb224934658167885</string>
     <string name="txt_fblogin">Log in with Facebook</string>
@@ -19,5 +22,8 @@
         \nMaecenas sagittis turpis non nisi egestas, in dignissim urna vulputate. Phasellus vehicula enim a sapien bibendum rutrum. Fusce dapibus massa id magna accumsan, sed rutrum lorem commodo. Etiam faucibus in orci iaculis consequat. In porta nibh id nibh sodales commodo. In auctor ipsum gravida, scelerisque enim quis, consequat tellus. Vivamus vitae ipsum non diam vulputate volutpat. Suspendisse aliquam felis convallis, tempor felis vel, venenatis purus.
         \nAenean odio mi, varius et tempus sit amet, finibus at ipsum. Donec elementum at felis quis dictum. Pellentesque luctus tortor eu nunc sodales, et rhoncus metus congue. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla varius ac sem sed molestie. Nam sed tempor justo. Curabitur laoreet turpis nec suscipit bibendum. Nulla accumsan tincidunt ante, vel sagittis urna vulputate in. Donec in augue nibh. Phasellus sodales nibh tincidunt elementum elementum. Aliquam ac elementum elit. Vestibulum sed est nibh. Suspendisse rutrum eget sem id ultricies. Praesent sit amet elementum est. Proin ac nisi nec justo mattis condimentum et sed urna.
     </string>
+    <string name="tnc_readandAccept">I read and accept</string>
+    <string name="tnc_ageAccept">I am 18 or above</string>
+    <string name="tnc_Agree"> AGREE</string>
 
 </resources>

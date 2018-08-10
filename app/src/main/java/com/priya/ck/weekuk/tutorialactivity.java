@@ -6,7 +6,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,11 +51,13 @@ public class tutorialactivity extends AppCompatActivity {
         setContentView(R.layout.activity_tutorial);
 
         viewPager = (ViewPager) findViewById(R.id.tutview_pager);
-        btnNext = (Button) findViewById(R.id.btn_next);
+        btnNext = (Button) findViewById(R.id.btn_tutorial_GetStarted);
 
         // layouts of all welcome sliders
         // add few more layouts if you want
-        layouts = new int[]{
+        layouts = new int[]{/*R.drawable.tutorialscreen1,
+                R.drawable.tutorialscreen2,
+                R.drawable.tutorialscreen3*/
                 R.layout.tutorialscreen1,
                 R.layout.tutorialscreen2,
                 R.layout.tutorialscreen3};
@@ -136,11 +137,13 @@ public class tutorialactivity extends AppCompatActivity {
             // changing the next button text 'NEXT' / 'GOT IT'
             if (position == layouts.length - 1) {
                 // last page. make button text to GetStarted
+                btnNext.setVisibility(View.VISIBLE);
                 btnNext.setText(getString(R.string.start));
                 timer.cancel(); //stop autoscroll on case 2: Autoscroll of slides
             } else {
                 // still pages are left
-                btnNext.setText(getString(R.string.next));
+                //btnNext.setText(getString(R.string.next));
+                btnNext.setVisibility(View.INVISIBLE);
             }
         }
 
