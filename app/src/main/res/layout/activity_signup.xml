@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/backgroundplain_image">
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.priya.ck.weekuk.SignupActivity"
+        android:background="@drawable/backgroundplain_image">
 
     <ImageView
         android:id="@+id/imageView_signup1"
@@ -39,6 +40,13 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/weekuklogo2" />
 
+    <!--Dummy layout added to take auto focus off the edit text-->
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px"/>
+
     <EditText
         android:id="@+id/txt_signupemail"
         android:layout_width="289dp"
@@ -46,9 +54,9 @@
         android:backgroundTint="@color/light_colour"
         android:ems="15"
         android:inputType="textPersonName"
-        android:text="Email"
+        android:hint="@string/txt_login_email"
         android:textColor="@color/light_colour"
-        android:textColorHint="@color/light_colour"
+        android:textColorHint="@drawable/edittextselector"
         android:textCursorDrawable="@color/light_colour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,10 +73,10 @@
         android:layout_height="48dp"
         android:backgroundTint="@color/light_colour"
         android:ems="15"
-        android:hint="Password"
+        android:hint="@string/txt_login_pwd"
         android:inputType="textPassword"
         android:textColor="@color/light_colour"
-        android:textColorHint="@color/light_colour"
+        android:textColorHint="@drawable/edittextselector"
         android:textCursorDrawable="@color/light_colour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,10 +92,10 @@
         android:layout_height="48dp"
         android:backgroundTint="@color/light_colour"
         android:ems="15"
-        android:hint="Confirm Password"
+        android:hint="@string/txt_login_confpwd"
         android:inputType="textPassword"
         android:textColor="@color/light_colour"
-        android:textColorHint="@color/light_colour"
+        android:textColorHint="@drawable/edittextselector"
         android:textCursorDrawable="@color/light_colour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -98,7 +106,7 @@
         app:layout_constraintVertical_bias="0.059" />
 
     <Button
-        android:id="@+id/btn_loginMain"
+        android:id="@+id/btn_NewuserSignUp"
         android:layout_width="290dp"
         android:layout_height="39dp"
         android:layout_marginBottom="8dp"
@@ -136,7 +144,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_loginMain"
+        app:layout_constraintTop_toBottomOf="@+id/btn_NewuserSignUp"
         app:layout_constraintVertical_bias="0.082" />
 
     <TextView
@@ -160,4 +168,4 @@
         app:layout_constraintTop_toBottomOf="@+id/txt_contactsupport"
         app:layout_constraintVertical_bias="0.507" />
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>

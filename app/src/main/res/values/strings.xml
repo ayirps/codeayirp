@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Weekuk</string>
     <string name="next">NEXT</string>
-    <string name="start">Get Started</string>
+    <string name="start">GET STARTED</string>
     <string name="txt_login_email">Email</string>
     <string name="txt_login_pwd">Password</string>
+    <string name="txt_login_confpwd">Confirm Password</string>
     <string name="txt_login">LOGIN</string>
     <string name="txt_signup">SIGN UP</string>
     <string name="txt_forgotlogin_gethelptxt">Forgot your Password? Get help <a href="actual url">Signing in</a></string>
@@ -26,4 +27,7 @@
     <string name="tnc_ageAccept">I am 18 or above</string>
     <string name="tnc_Agree"> AGREE</string>
 
+    <string name="alert_email">Enter a valid Email</string>
+    <string name="alert_pwd">Enter a password</string>
+    <string name="alert_pwdnotmatch">Passwords don\'t match</string>
 </resources>

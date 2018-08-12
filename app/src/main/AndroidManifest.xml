@@ -11,15 +11,15 @@
         android:roundIcon="@mipmap/weekuk_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".mainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".tutorialactivity" />
-        <activity android:name=".initialLogin" />
+        <activity android:name=".TutorialActivity" />
+        <activity android:name=".MainLoginActivity" />
 
         <!-- Facebook activity integration into Weekuk app -->
         <meta-data
@@ -42,7 +42,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".termsandconditionsActivity"></activity>
+        <activity android:name=".TermsAndConditionsActivity" />
+        <activity android:name=".SignupActivity"></activity>
     </application>
 
 </manifest>

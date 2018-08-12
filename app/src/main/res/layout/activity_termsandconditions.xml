@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/backgroundplain_image"
-    tools:context="com.priya.ck.weekuk.termsandconditionsActivity">
+    tools:context="com.priya.ck.weekuk.TermsAndConditionsActivity">
 
 
     <android.support.constraint.ConstraintLayout

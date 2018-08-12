@@ -16,14 +16,14 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class tutorialactivity extends AppCompatActivity {
+public class TutorialActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
     private LinearLayout dotsLayout;
     private TextView[] dots;
     private int[] layouts;
-    private Button btnNext;
+    private Button btnGetStarted;
     private Timer timer;
     //private PrefManager prefManager;
 
@@ -31,7 +31,7 @@ public class tutorialactivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            tutorialactivity.this.runOnUiThread(new Runnable() {
+            TutorialActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (viewPager.getCurrentItem() < layouts.length - 1) {
@@ -51,7 +51,7 @@ public class tutorialactivity extends AppCompatActivity {
         setContentView(R.layout.activity_tutorial);
 
         viewPager = (ViewPager) findViewById(R.id.tutview_pager);
-        btnNext = (Button) findViewById(R.id.btn_tutorial_GetStarted);
+        btnGetStarted = (Button) findViewById(R.id.btn_tutorial_GetStarted);
 
         // layouts of all welcome sliders
         // add few more layouts if you want
@@ -61,9 +61,6 @@ public class tutorialactivity extends AppCompatActivity {
                 R.layout.tutorialscreen1,
                 R.layout.tutorialscreen2,
                 R.layout.tutorialscreen3};
-
-        // adding bottom dots
-        //addBottomDots(0);
 
         // making notification bar transparent
         //changeStatusBarColor();
@@ -76,7 +73,7 @@ public class tutorialactivity extends AppCompatActivity {
         timer = new Timer();
         timer.scheduleAtFixedRate(new SliderTimer(), 2000, 3000);
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
+        btnGetStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // checking for last page
@@ -99,51 +96,33 @@ public class tutorialactivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-   /* private void addBottomDots(int currentPage) {
-        dots = new TextView[layouts.length];
-
-        int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
-        int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
-
-        dotsLayout.removeAllViews();
-        for (int i = 0; i < dots.length; i++) {
-            dots[i] = new TextView(this);
-            dots[i].setText(Html.fromHtml("&#8226;"));
-            dots[i].setTextSize(35);
-            dots[i].setTextColor(colorsInactive[currentPage]);
-            dotsLayout.addView(dots[i]);
-        }
-
-        if (dots.length > 0)
-            dots[currentPage].setTextColor(colorsActive[currentPage]);
-    }*/
-
     private int getItem(int i) {
         return viewPager.getCurrentItem() + i;
     }
 
     private void launchLoginScreen() {
-        startActivity(new Intent(tutorialactivity.this, initialLogin.class));
+        startActivity(new Intent(TutorialActivity.this, MainLoginActivity.class));
         finish();
     }
 
     //  viewpager change listener
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
 
+        /**
+         * Handle scrolling of tutorial pages
+         */
         @Override
         public void onPageSelected(int position) {
-            //addBottomDots(position);
-
             // changing the next button text 'NEXT' / 'GOT IT'
             if (position == layouts.length - 1) {
                 // last page. make button text to GetStarted
-                btnNext.setVisibility(View.VISIBLE);
-                btnNext.setText(getString(R.string.start));
+                btnGetStarted.setVisibility(View.VISIBLE);
+                btnGetStarted.setText(getString(R.string.start));
                 timer.cancel(); //stop autoscroll on case 2: Autoscroll of slides
             } else {
                 // still pages are left
-                //btnNext.setText(getString(R.string.next));
-                btnNext.setVisibility(View.INVISIBLE);
+                //btnGetStarted.setText(getString(R.string.next));
+                btnGetStarted.setVisibility(View.INVISIBLE);
             }
         }
 
