@@ -30,4 +30,6 @@
     <string name="alert_email">Enter a valid Email</string>
     <string name="alert_pwd">Enter a password</string>
     <string name="alert_pwdnotmatch">Passwords don\'t match</string>
+
+
 </resources>

@@ -6,7 +6,11 @@ package Helper;
 
 public class LogTag {
 
-    public static final String TAG_SIGNUP = "TAG_SIGNUP";
+    public static final String TAG_SIGNUP = "WK/TAG_SIGNUP";
 
-    public static final String VOLLEYREQTAG = "VOLLEYREQTAG";
+    public static final String VOLLEYREQTAG = "WK/VOLLEYREQTAG";
+
+    public static final String FBLOGIN = "WK/FBLOGIN";
+
+    public static final String GMAILLOGIN = "WK/GMAILLOGIN";
 }

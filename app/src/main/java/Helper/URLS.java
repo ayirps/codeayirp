@@ -6,9 +6,9 @@ package Helper;
 
 public class URLS {
 
-        private static final String ROOT_URL = "http://52.90.190.13/weekuk/api/";
+        private static final String ROOT_URL = "http://18.212.70.235/weekuk/api/";//"http://52.90.190.13/weekuk/api/";
 
-        private static final String IMAGE_URL ="http://52.90.190.13/weekuk/public/uploads/";
+        private static final String IMAGE_URL ="http://18.212.70.235/weekuk/public/uploads/";
 
         public static final String URL_REGISTER = ROOT_URL + "register";
 

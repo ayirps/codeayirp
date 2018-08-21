@@ -80,6 +80,14 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed(){
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
+    }
+
     /**
      * Param : 1.user email
      *         2.password
@@ -148,7 +156,7 @@ public class SignupActivity extends AppCompatActivity {
                                 finish();
                                 startActivity(new Intent(getApplicationContext(), TermsAndConditionsActivity.class));
                             } else {
-                                Log.i(LogTag.TAG_SIGNUP, obj.getString("message"));
+                                Log.d(LogTag.TAG_SIGNUP, obj.getString("message"));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -172,7 +180,7 @@ public class SignupActivity extends AppCompatActivity {
                 params.put("password", mPassword);
                 params.put("profileName","");
                 params.put("profilePicture","");
-                params.put("type",Config.LOGIN_WITH_ANDROID);
+                params.put("type",Config.OS_TYPE_ANDROID);
                 params.put("userName", mEmailTxt);
                 Log.i(LogTag.VOLLEYREQTAG, "Request params: " + params.toString());
                 return params;

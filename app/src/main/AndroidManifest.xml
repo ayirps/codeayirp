@@ -43,7 +43,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".TermsAndConditionsActivity" />
-        <activity android:name=".SignupActivity"></activity>
+        <activity android:name=".SignupActivity" />
+        <activity android:name=".UserProfileActivity"></activity>
     </application>
 
 </manifest>
