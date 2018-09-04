@@ -135,22 +135,21 @@
 
     <com.facebook.login.widget.LoginButton xmlns:facebook="http://schemas.android.com/apk/res-auto"
         android:id="@+id/login_fbbutton"
-        android:layout_width="290dp"
-        android:layout_height="26dp"
+        android:layout_width="279dp"
+        android:layout_height="30dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginEnd="40dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         facebook:com_facebook_login_text="@string/txt_fblogin"
         facebook:layout_constraintBottom_toBottomOf="parent"
         facebook:layout_constraintEnd_toEndOf="parent"
-        facebook:layout_constraintHorizontal_bias="0.883"
+        facebook:layout_constraintHorizontal_bias="0.69"
         facebook:layout_constraintRight_toRightOf="parent"
         facebook:layout_constraintStart_toStartOf="parent"
         facebook:layout_constraintTop_toBottomOf="@+id/rel_layout_ortxt"
-        facebook:layout_constraintVertical_bias="0.078" />
+        facebook:layout_constraintVertical_bias="0.11" />
 
     <RelativeLayout
         android:id="@+id/rel_layout_ortxt"
@@ -195,8 +194,8 @@
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/gms_signin"
-        android:layout_width="294dp"
-        android:layout_height="36dp"
+        android:layout_width="288dp"
+        android:layout_height="39dp"
         android:layout_centerInParent="true"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"

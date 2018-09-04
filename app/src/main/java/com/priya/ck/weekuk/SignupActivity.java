@@ -1,6 +1,8 @@
 package com.priya.ck.weekuk;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,6 +19,15 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,21 +35,30 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import Helper.Config;
-import Helper.URLS;
-import Helper.VolleyRequestHandlerSingleton;
-import Helper.LogTag;
+import helper.Config;
+import helper.HelpUtils;
+import helper.URLS;
+import helper.VolleyRequestHandlerSingleton;
+import helper.LogTag;
 
 public class SignupActivity extends AppCompatActivity {
 
     private String mEmailTxt;
     private String mPassword;
     private String mConfirmPwd;
+    private FirebaseAuth mAuth;
+    FirebaseDatabase mDatabase;
+    User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase=FirebaseDatabase.getInstance();
+        mUser = new User();
 
         /**
          * Handle Forgot Passoword hyperlink click.
@@ -49,14 +69,18 @@ public class SignupActivity extends AppCompatActivity {
         contactsupportLinkTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startActivity(new Intent(SignupActivity.this, SignupActivity.class)); //TODO
-                finish();
+                //finish();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Uri data = Uri.parse("mailto:" + Config.WEEKUK_SUPPORT_EMAIL +
+                        "?subject=" + Config.WEEKUK_SUPPORTEMAIL_SUB + "&body=" + Config.WEEKUK_SUPPORTEMAIL_BODY);
+                intent.setData(data);
+                startActivity(intent);
             }
         });
         //End - handle hyperlink
 
         /**
-         * Handle Forgot Passoword hyperlink click.
+         * Handle "back to Sign-in page".
          * When a new user clicks Forgot passowrd, an alert should be shown to hel user fetch details
          **/
         TextView olduserSignInLinkTxt = (TextView) findViewById(R.id.txt_signin_already);
@@ -70,6 +94,7 @@ public class SignupActivity extends AppCompatActivity {
         });
         //End - handle hyperlink
 
+        //Handle newuser sign-up
         Button btnSignUP = (Button) findViewById(R.id.btn_NewuserSignUp);
         btnSignUP.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +103,13 @@ public class SignupActivity extends AppCompatActivity {
                 signupNewUser();
             }
         });
+    }
+
+    protected void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        //updateUI(currentUser);
     }
 
     @Override
@@ -118,45 +150,87 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         //Check if password field is empty
-        if (TextUtils.isEmpty(mPassword)) {
+        if (TextUtils.isEmpty(mPassword)  || TextUtils.isEmpty(mConfirmPwd)) {
             userPwd.setError(getResources().getString(R.string.alert_pwd));
             userPwd.requestFocus();
-            return;
-        }
-
-        //Check if confirm password field is empty
-        if (TextUtils.isEmpty(mConfirmPwd)) {
-            userConfirmPwd.setError(getResources().getString(R.string.alert_pwd));
-            userConfirmPwd.requestFocus();
             return;
         }
 
         if (!TextUtils.equals(mPassword, mConfirmPwd)) {
             userPwd.requestFocus();
             userPwd.setError(getResources().getString(R.string.alert_pwdnotmatch));
+            return;
         }
 
+        if (mPassword.length() < 6) {
+            userPwd.requestFocus();
+            userPwd.setError(getResources().getString(R.string.alert_pwdlength));
+            return;
+        }
+
+        sendSignUpDetailsToServer();
+    }
+
+    protected void signUp(final String email,final String password) {
+        Task<AuthResult> authResultTask = mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(LogTag.APPLOGIN, "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            User u=new User();
+                            //u.setName(name);
+                            u.setEmail(user.getEmail());
+                            mDatabase.getReference("user").child(user.getUid()).setValue(u);
+                            //updateUI(user);
+
+                            //starting the Terms&Conditions activity //TODO
+                            Intent intent = new Intent(SignupActivity.this,
+                                    TermsAndConditionsActivity.class);
+                            startActivity(intent);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.d(LogTag.APPLOGIN, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(SignupActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+                    }
+                });
+    }
+
+    private void updateUI(final FirebaseUser user) {
+        if(null!=user){
+            mDatabase.getReference("user").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mUser = dataSnapshot.getValue(User.class);
+                    mUser.setUid(user.getUid());
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    protected void sendSignUpDetailsToServer(){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLS.URL_SIGNUP,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            //converting response to json object
                             JSONObject obj = new JSONObject(response);
-
-                            //if no error in response
-                            if (!obj.getBoolean("error")) {
-                                Log.i(LogTag.TAG_SIGNUP, obj.getString("message"));
-
-                                //getting the user from the response
-                                JSONObject userJson = obj.getJSONObject("user");
-
-                                //starting the Terms&Conditions activity
-                                //TODO
-                                finish();
-                                startActivity(new Intent(getApplicationContext(), TermsAndConditionsActivity.class));
+                            String servResp = obj.getString("status");
+                            Log.d(LogTag.GMAILLOGIN, "Response Status" + servResp );
+                            if (servResp.equalsIgnoreCase(Config.WEBAPI_RESP_SUCCESS)) {
+                                signUp(mEmailTxt, mPassword);
                             } else {
-                                Log.d(LogTag.TAG_SIGNUP, obj.getString("message"));
+                                Log.d(LogTag.TAG_SIGNUP, "Google login error");
+                                HelpUtils.showAlertMessageToUser(SignupActivity.this,getString(R.string.app_name),getString(R.string.txt_alert_user_response_err));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -172,7 +246,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("deviceToken", Config.getInstance().getSessionId());
+                params.put("deviceToken", Config.getInstance().getSessionId(getApplicationContext()));
                 params.put("firstName","");
                 params.put("lastName","");
                 params.put("loginWith",Config.TYPE_APP_LOGIN);
@@ -186,9 +260,8 @@ public class SignupActivity extends AppCompatActivity {
                 return params;
             }
         };
-
         //post a sign_up request
-        Log.i(LogTag.VOLLEYREQTAG, "Request body: " + stringRequest);
+        Log.d(LogTag.VOLLEYREQTAG, "Request body: " + stringRequest);
         VolleyRequestHandlerSingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 }

@@ -8,4 +8,7 @@
         <item name="colorAccent">@color/light_colour</item> <!-- Helped changing the cursor selectors in edit text box-->
     </style>
 
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
 </resources>

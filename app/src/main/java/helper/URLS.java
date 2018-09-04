@@ -1,4 +1,4 @@
-package Helper;
+package helper;
 
 /**
  * Created by User on 11/08/2018.
@@ -16,7 +16,7 @@ public class URLS {
 
         public static final String URL_LOGIN = ROOT_URL + "login";
 
-        public static final String URL_FORGOTPWD = ROOT_URL + "forgotpassword";
+        public static final String URL_FORGOTPWD = ROOT_URL + "forgotPassword";
 
         public static final String URL_PAGESTATE = ROOT_URL + "pageState";
 

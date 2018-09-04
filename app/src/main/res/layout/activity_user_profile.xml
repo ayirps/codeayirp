@@ -7,4 +7,72 @@
     android:background="@drawable/backgroundplain_image"
     tools:context="com.priya.ck.weekuk.UserProfileActivity">
 
+    <!-- <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <EditText
+            android:id="@+id/messageEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:hint="Enter your message"
+            android:ems="10" >
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/addButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/messageEditText"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:text="Add" />
+
+    </RelativeLayout> -->
+
+    <ImageView
+        android:id="@+id/ivProfile_1"
+        android:layout_width="93dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
+
+    <!-- Your Scrollable View -->
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="368dp"
+        android:layout_height="445dp"
+        android:layout_marginTop="19dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivProfile"
+        app:layout_constraintVertical_bias="0.0"
+        android:scrollbars="vertical">
+
+        <com.xw.repo.BubbleSeekBar
+            android:id="@+id/radiusSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:bsb_bubble_color="@color/colorWhite"
+            app:bsb_bubble_text_color="@color/colorBlack"
+            app:bsb_max="10.0"
+            app:bsb_min="1"
+            app:bsb_progress="0"
+            app:bsb_second_track_color="@color/colorWhite"
+            app:bsb_section_count="4"
+            app:bsb_section_text_position="bottom_sides"
+            app:bsb_show_progress_in_float="true"
+            app:bsb_show_section_mark="true"
+            app:bsb_show_section_text="true"
+            app:bsb_show_thumb_text="false"
+            app:bsb_track_color="@color/colorWhite" />
+
+    </android.support.v7.widget.RecyclerView>
 </android.support.constraint.ConstraintLayout>

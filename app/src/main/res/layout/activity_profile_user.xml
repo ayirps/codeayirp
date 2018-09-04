@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroundplain_image"
+    tools:context="com.priya.ck.weekuk.UserProfileActivity">
+
+    <FrameLayout
+        android:id="@+id/ivProfileFL"
+        android:layout_width="378dp"
+        android:layout_height="136dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="91dp"
+            android:layout_height="97dp"
+            android:layout_gravity="center_vertical|center"
+            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
+    </FrameLayout>
+
+    <ScrollView
+        android:layout_width="354dp"
+        android:layout_height="353dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.666">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!--Dummy layout added to take auto focus off the edit text-->
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
+
+            <EditText
+                android:id="@+id/et_userprofile_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:backgroundTint="@color/light_colour"
+                android:ems="10"
+                android:hint="@string/txt_userprof_name"
+                android:inputType="textPersonName"
+                android:textColor="@color/light_colour"
+                android:textColorHint="@drawable/edittextselector"
+                android:textCursorDrawable="@color/light_colour"
+                android:textSize="@dimen/userprog_textsize"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView_userprof_gender"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_gravity="left"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/light_colour"
+                android:text="@string/txt_userprof_gender"
+                android:textColor="@color/light_colour"
+                android:textSize="@dimen/userprog_textsize"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/linlayout_userprof_gender"
+                android:layout_width="339dp"
+                android:layout_height="37dp"
+
+                android:layout_gravity="left"
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:id="@+id/radioGroup_userprof_gender"
+                    android:layout_width="334dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radioButton_userprof_male"
+                        android:layout_width="86dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:buttonTint="@color/light_colour"
+                        android:text="@string/txt_userprof_gender_male"
+                        android:textColor="@color/light_colour"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton_userprof_female"
+                        android:layout_width="86dp"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/light_colour"
+                        android:text="@string/txt_userprof_gender_female"
+                        android:textColor="@color/light_colour"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/relLayout_userprof_location"
+                android:layout_width="302dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editText_userprof_location"
+                    android:layout_width="250dp"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/light_colour"
+                    android:hint="@string/txt_userprof_location"
+                    android:textColor="@color/light_colour"
+                    android:textColorHint="@drawable/edittextselector"
+                    android:textCursorDrawable="@color/light_colour"
+                    android:textSize="@dimen/userprog_textsize"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/btn_googlemap_placemarker"
+                    android:layout_width="46dp"
+                    android:layout_height="49dp"
+                    android:padding="2dp"
+                    android:src="@android:drawable/ic_menu_search"
+                    tools:ignore="contentDescription" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView_userprof_distance"
+                android:layout_width="340dp"
+                android:layout_height="33dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/light_colour"
+                android:text="@string/txt_userprof_distance"
+                android:textColor="@color/light_colour"
+                android:textSize="@dimen/userprog_textsize"
+                android:textStyle="bold" />
+
+            <com.xw.repo.BubbleSeekBar
+                android:id="@+id/radiusSeekBar"
+                android:layout_width="342dp"
+                android:layout_height="70dp"
+                app:bsb_bubble_color="@color/colorWhite"
+                app:bsb_bubble_text_color="@color/colorBlack"
+                app:bsb_max="10.0"
+                app:bsb_min="1"
+                app:bsb_progress="0"
+                app:bsb_second_track_color="@color/colorWhite"
+                app:bsb_section_count="4"
+                app:bsb_section_text_position="bottom_sides"
+                app:bsb_show_progress_in_float="true"
+                app:bsb_show_section_mark="true"
+                app:bsb_show_section_text="true"
+                app:bsb_show_thumb_text="false"
+                app:bsb_track_color="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/textView_userprof_Hobbies"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="left"
+                android:backgroundTint="@color/light_colour"
+                android:text="@string/txt_tv_userprof_Hobby"
+                android:textColor="@color/light_colour"
+                android:textSize="@dimen/userprog_textsize"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/textView_userprof_favouritefood"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="left"
+                android:backgroundTint="@color/light_colour"
+                android:text="@string/txt_tv_userprof_favfood"
+                android:textColor="@color/light_colour"
+                android:textSize="@dimen/userprog_textsize"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView_userprof_foodpref"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="left"
+                android:backgroundTint="@color/light_colour"
+                android:text="@string/txt_tv_userprof_foodpref"
+                android:textColor="@color/light_colour"
+                android:textSize="@dimen/userprog_textsize"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/linlayout_userprof_food_pref"
+                android:layout_width="312dp"
+                android:layout_height="37dp"
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:id="@+id/radioGroup_userprof_food"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radioButton_userprof_food_v"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/light_colour"
+                        android:text="@string/txt_tv_userprof_foodpref_v"
+                        android:textColor="@color/light_colour"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton_userprof_food_nv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/light_colour"
+                        android:text="@string/txt_tv_userprof_foodpref_nv"
+                        android:textColor="@color/light_colour"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton_userprof_food_both"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/light_colour"
+                        android:text="@string/txt_tv_userprof_foodpref_both"
+                        android:textColor="@color/light_colour"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView_userprof_cookskill"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="left"
+                android:backgroundTint="@color/light_colour"
+                android:text="@string/txt_tv_userprof_cookskill"
+                android:textColor="@color/light_colour"
+                android:textSize="@dimen/userprog_textsize"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/linlayout_userprof_cookskill"
+                android:layout_width="312dp"
+                android:layout_height="37dp"
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:id="@+id/radioGroup_userprof_cookskill"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radioButton_userprof_cookskill_begin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/light_colour"
+                        android:text="@string/txt_tv_userprof_cookskill_begin"
+                        android:textColor="@color/light_colour"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton_userprof_cookskill_mid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/light_colour"
+                        android:text="@string/txt_tv_userprof_cookskill_mid"
+                        android:textColor="@color/light_colour"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton_userprof_cookskill_chef"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/light_colour"
+                        android:text="@string/txt_tv_userprof_cookskill_chef"
+                        android:textColor="@color/light_colour"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView_userprof_kitchenpicture"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="left"
+                android:backgroundTint="@color/light_colour"
+                android:text="@string/txt_tv_userprof_kitpict"
+                android:textColor="@color/light_colour"
+                android:textSize="@dimen/userprog_textsize"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <ImageView
+                    android:id="@+id/ivImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/userprof_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <Button
+        android:id="@+id/btn_userprofile_save"
+        android:layout_width="98dp"
+        android:layout_height="43dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="28dp"
+        android:background="@drawable/border_loginbtn"
+        android:text="@string/btnTxt_userprof_save"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+
+</android.support.constraint.ConstraintLayout>
