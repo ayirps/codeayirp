@@ -39,7 +39,12 @@ dependencies {
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'com.xw.repo:bubbleseekbar:3.16'
     implementation 'com.google.firebase:firebase-core:16.0.1'
+    compile 'net.alhazmy13.MediaPicker:libary:2.4.0'
+    compile 'com.github.danylovolokh:hashtag-helper:1.1.0'
+    compile 'co.lujun:androidtagview:1.1.4'
 }
+
+
 
 
 

@@ -31,13 +31,15 @@
         android:layout_height="353dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.666">
+        app:layout_constraintVertical_bias="0.666"
+        android:isScrollContainer="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,7 +51,9 @@
                 android:layout_width="0px"
                 android:layout_height="0px"
                 android:focusable="true"
-                android:focusableInTouchMode="true" />
+                android:focusableInTouchMode="true" >
+                <requestFocus/>
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/et_userprofile_name"
@@ -133,7 +137,8 @@
                     android:textColorHint="@drawable/edittextselector"
                     android:textCursorDrawable="@color/light_colour"
                     android:textSize="@dimen/userprog_textsize"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:clickable="true"/>
 
                 <ImageButton
                     android:id="@+id/btn_googlemap_placemarker"
@@ -173,28 +178,31 @@
                 app:bsb_show_thumb_text="false"
                 app:bsb_track_color="@color/colorWhite" />
 
-            <TextView
+            <EditText
                 android:id="@+id/textView_userprof_Hobbies"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="left"
                 android:backgroundTint="@color/light_colour"
                 android:text="@string/txt_tv_userprof_Hobby"
                 android:textColor="@color/light_colour"
                 android:textSize="@dimen/userprog_textsize"
-                android:textStyle="bold" />
-            <TextView
+                android:textStyle="bold"
+                android:clickable="true"/>
+
+            <EditText
                 android:id="@+id/textView_userprof_favouritefood"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="left"
                 android:backgroundTint="@color/light_colour"
                 android:text="@string/txt_tv_userprof_favfood"
                 android:textColor="@color/light_colour"
                 android:textSize="@dimen/userprog_textsize"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:clickable="true"/>
 
             <TextView
                 android:id="@+id/textView_userprof_foodpref"
@@ -322,16 +330,17 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="250dp"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="10dp" >
 
                 <ImageView
-                    android:id="@+id/ivImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
+                    android:id="@+id/kitchenPic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:src="@android:drawable/ic_menu_camera" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

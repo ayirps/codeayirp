@@ -1,6 +1,7 @@
 package com.priya.ck.weekuk;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -66,10 +67,13 @@ public class CurrentLocationActivity extends AppCompatActivity {
                 Log.d(LogTag.GMAP, "CurrentLocationActivity:OnClick");
                 Location location = mMapFragment.getCurrentLocation();
                 if(location != null){
-                    Intent intent = new Intent(CurrentLocationActivity.this,UserProfileActivity.class);
-                    intent.putExtra(Config.CURR_LOCATION_LAT,location.getLatitude());
-                    intent.putExtra(Config.CURR_LOCATION_LONG,location.getLongitude());
-                    startActivity(intent);
+                    Intent returnIntent = getIntent();//new Intent(CurrentLocationActivity.this,UserProfileActivity.class);
+                    returnIntent.putExtra(Config.CURR_LOCATION_LAT,location.getLatitude());
+                    returnIntent.putExtra(Config.CURR_LOCATION_LONG,location.getLongitude());
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    startActivity(returnIntent);
+                    //finish();
+                    finishActivity(UserProfileActivity.GOOGLEMAP_REQUEST_CODE);
                 }
             }
         });

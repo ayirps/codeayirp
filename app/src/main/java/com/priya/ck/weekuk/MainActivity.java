@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             }, SPLASH_TIME);
         }else{
             //Show Main Login page
-           // Intent intent = new Intent(MainActivity.this,MainLoginActivity.class);
+           //Intent intent = new Intent(MainActivity.this,MainLoginActivity.class);
             Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
             startActivity(intent);
         }

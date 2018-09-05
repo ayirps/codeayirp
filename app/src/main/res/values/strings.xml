@@ -66,11 +66,7 @@
     <string name="txt_tv_userprof_Hobby">Hobbies</string>
     <string name="txt_tv_userprof_favfood">Favourite Foods</string>
     <string name="txt_tv_userprof_kitpict">Kitchen Picture</string>
-
-
-
-
-
-
-
+    <string name="txt_btn_finish">DONE</string>
+    <string name="txt_label_hobby">HOBBIES</string>
+    <string name="txt_label_favfood">FAVOURITE FOOD</string>
 </resources>

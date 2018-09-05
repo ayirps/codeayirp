@@ -9,7 +9,9 @@ import android.content.SharedPreferences;
 
 public class Config {
         public static final String WK_PREFS_NAME = "WK_PrefsFile";
-    public static final String WK_PREFS_ID_VAL = "uuid";
+        public static final String WK_PREFS_ID_VAL = "uuid";
+        public static final String WK_PREFS_HOBBY = "hobby";
+        public static final String WK_PREFS_FAVFOOD = "favfood";
 
         public static final int ALERT_DIALOG_FORGOTPWD = 1;
         public static final String OS_TYPE_ANDROID = "3";
@@ -31,7 +33,12 @@ public class Config {
 
         public static final String CURR_LOCATION_LAT= "LAT";
         public static final String CURR_LOCATION_LONG = "LON";
-        public static int LOCATION_GMAP = 1;
+        public static final String USERPROF_TAG_HOBBYTAG = "HOBBY";
+        public static final String USERPROF_TAG_FAVFOODTAG = "FAVFOOD";
+        public static int LOCATION_GMAP = 2011;
+        public static final int REQCODE_USERPROF_HOBBY = 1985;
+        public static final int REQCODE_USERPROF_FAVFOOD = 1986;
+
         private static Config config = null;
 
         private String mSessionId;

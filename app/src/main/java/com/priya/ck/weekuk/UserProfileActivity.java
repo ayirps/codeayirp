@@ -1,6 +1,9 @@
 package com.priya.ck.weekuk;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
@@ -36,11 +39,15 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.xw.repo.BubbleSeekBar;
 
+import net.alhazmy13.mediapicker.Image.ImagePicker;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -53,7 +60,9 @@ import helper.URLS;
 import helper.VolleyRequestHandlerSingleton;
 
 public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener{
-
+    public static final int USERPROFILEHOBBY_REQUEST_CODE = 26;
+    public static final int USERPROFILEFOOD_REQUEST_CODE = 4;
+    public static final int GOOGLEMAP_REQUEST_CODE = 10;
     private BubbleSeekBar radiusSeekBar;
     private double mUserDistanceSelection = 0;
     String mUserName;
@@ -62,6 +71,11 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     String mCookSkill = "";
     double mLatitude = 0.0;
     double mLongitude = 0.0;
+    ImagePicker mKitchenPicSelector;
+    String mKitchenPic="";
+    String mHobbyStr ="";
+    String mFavFoodStr ="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +152,20 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             }
         });
 
+        //Open Google maps and choose location
+        EditText edLocation = findViewById(R.id.editText_userprof_location);
+        edLocation.setOnClickListener(this);
         ImageButton openMap = findViewById(R.id.btn_googlemap_placemarker);
         openMap.setOnClickListener(this);
+
+        ImageView kitchenPic = findViewById(R.id.kitchenPic);
+        kitchenPic.setOnClickListener(this);
+
+        EditText et_hobby = findViewById(R.id.textView_userprof_Hobbies);
+        et_hobby.setOnClickListener(this);
+
+        EditText et_favFood = findViewById(R.id.textView_userprof_favouritefood);
+        et_favFood.setOnClickListener(this);
     }
 
     @Override
@@ -155,13 +181,36 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         Log.d(LogTag.USERPROFILE, "UserProfile:OnClick Start");
         switch(view.getId()){
+            case R.id.editText_userprof_location:
             case R.id.btn_googlemap_placemarker:{
                 Intent intent = new Intent(UserProfileActivity.this,CurrentLocationActivity.class);
-                startActivityForResult(intent,Config.LOCATION_GMAP);
+                startActivityForResult(intent,GOOGLEMAP_REQUEST_CODE);//Config.LOCATION_GMAP);
                 break;
             }
             case R.id.btn_userprofile_save:{
                 handleUserProfileSave();
+                break;
+            }
+            case R.id.kitchenPic:{
+                mKitchenPicSelector = new ImagePicker.Builder(UserProfileActivity.this)
+                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+                        .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
+                        .directory(ImagePicker.Directory.DEFAULT)
+                        .extension(ImagePicker.Extension.JPG)
+                        .scale(600, 600)
+                        .allowMultipleImages(false)
+                        .enableDebuggingMode(true)
+                        .build();
+                break;
+            }
+            case R.id.textView_userprof_Hobbies:{
+                Intent intent = new Intent(UserProfileActivity.this,UserProfileHobbyActivity.class);
+                startActivityForResult(intent,Config.REQCODE_USERPROF_HOBBY);
+                break;
+            }
+            case R.id.textView_userprof_favouritefood:{
+                Intent intent = new Intent(UserProfileActivity.this,UserProfileFavFoodActivity.class);
+                startActivityForResult(intent,Config.REQCODE_USERPROF_FAVFOOD);
                 break;
             }
         }
@@ -180,6 +229,10 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             return;
         }
 
+        //3.Incase if user entered without choosing from googlemap
+        EditText locationET = (EditText) findViewById(R.id.editText_userprof_location);
+        mLocalAddress = locationET.getText().toString();
+
         //2.Gender & 4.Distance
         if(mGender.equals("") || (mUserDistanceSelection == 0)){
             HelpUtils.showAlertMessageToUser(UserProfileActivity.this,getString(R.string.app_name),getString(R.string.txt_alert_user_response_err));
@@ -190,13 +243,15 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         Log.d(LogTag.USERPROFILE, "UserProfile:handleUserProfileSave End");
     }
 private String mLocalAddress = "";
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(LogTag.USERPROFILE, "UserProfile:onActivityResult Start");
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == Config.LOCATION_GMAP) {
+        if (requestCode == GOOGLEMAP_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
-                Intent intent = getIntent();
+                Intent intent = data;
                 //3.Location
                 intent.getDoubleExtra(Config.CURR_LOCATION_LAT,mLatitude);
                 intent.getDoubleExtra(Config.CURR_LOCATION_LONG,mLongitude);
@@ -221,6 +276,42 @@ private String mLocalAddress = "";
                 EditText userNameET = (EditText) findViewById(R.id.editText_userprof_location);
                 mLocalAddress = city + ','+ postalCode;
                 userNameET.setText(mLocalAddress);
+            }
+        }else  if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+            List<String> mPaths = (List<String>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_PATH);
+            //call the method 'getImageFilePath(Intent data)' even if compression is set to false
+            String filePath = mPaths.get(0);
+
+            //TODO
+            if (filePath != null) {//filePath will return null if compression is set to true
+                Bitmap selectedImage = BitmapFactory.decodeFile(filePath);
+                ImageView kitchenPic = findViewById(R.id.kitchenPic);
+                kitchenPic.setImageBitmap(selectedImage);
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] imageBytes = baos.toByteArray();
+                mKitchenPic = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            }
+        }else if(requestCode == Config.REQCODE_USERPROF_HOBBY && resultCode == RESULT_OK){
+            Intent intent = data;
+            ArrayList<String> hobbyTags = new ArrayList<String>();
+            hobbyTags = intent.getStringArrayListExtra(Config.USERPROF_TAG_HOBBYTAG);
+            int i= hobbyTags.size();
+            while(i >= 0) {
+                i--;
+                mHobbyStr.concat(hobbyTags.get(i));
+                mHobbyStr.concat(",");
+            }
+        }else if(requestCode == Config.REQCODE_USERPROF_FAVFOOD && resultCode == RESULT_OK){
+            Intent intent = getIntent();
+            ArrayList<String> favfoodTags = new ArrayList<String>();
+            favfoodTags = intent.getStringArrayListExtra(Config.USERPROF_TAG_FAVFOODTAG);
+            int i= favfoodTags.size();
+            while(i >= 0) {
+                i--;
+                mFavFoodStr.concat(favfoodTags.get(i));
+                mFavFoodStr.concat(",");
             }
         }
         Log.d(LogTag.USERPROFILE, "UserProfile:onActivityResult End");
@@ -339,11 +430,11 @@ private String mLocalAddress = "";
                 params.put("homeLng",Double.toString(mLongitude));
                 params.put("foodPreference",mFoodPref);
                 params.put("cookingSkill",mCookSkill);
-                /*params.put("favFoods","biriyani,dosa");
-                params.put("hobbies",Config.OS_TYPE_ANDROID);
-                params.put("profilePicture",Config.OS_TYPE_ANDROID);
-                params.put("kitchenPicture",Config.OS_TYPE_ANDROID);
-                params.put("pageStatus",Config.OS_TYPE_ANDROID);*/
+                params.put("favFoods",mFavFoodStr);
+                params.put("hobbies",mHobbyStr);
+                params.put("profilePicture",mKitchenPic);
+                params.put("kitchenPicture",mKitchenPic);
+                //params.put("pageStatus",Config.OS_TYPE_ANDROID);
                 Log.d(LogTag.VOLLEYREQTAG, "Request params: " + params.toString());
                 return params;
             }
