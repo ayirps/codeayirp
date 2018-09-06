@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,12 +29,14 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 import helper.Config;
 import helper.LocationHelper;
 import helper.LogTag;
 import helper.MapFragment;
 
-public class CurrentLocationActivity extends AppCompatActivity {
+public class CurrentLocationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
@@ -61,22 +64,33 @@ public class CurrentLocationActivity extends AppCompatActivity {
         transaction.commit();
 
         Button locationDoneClick = (Button)findViewById(R.id.confirmLocationOK);
-        locationDoneClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        locationDoneClick.setOnClickListener(this);
+    }
+
+    public void onClick(View view) {
+        Log.d(LogTag.USERPROFILE, "UserProfile:OnClick Start");
+        switch (view.getId()) {
+            case R.id.confirmLocationOK: {
                 Log.d(LogTag.GMAP, "CurrentLocationActivity:OnClick");
                 Location location = mMapFragment.getCurrentLocation();
-                if(location != null){
+                if (location != null) {
+                    /*
+                    //Method 1:
                     Intent returnIntent = getIntent();//new Intent(CurrentLocationActivity.this,UserProfileActivity.class);
-                    returnIntent.putExtra(Config.CURR_LOCATION_LAT,location.getLatitude());
-                    returnIntent.putExtra(Config.CURR_LOCATION_LONG,location.getLongitude());
+                    returnIntent.putExtra(Config.CURR_LOCATION_LAT, location.getLatitude());
+                    returnIntent.putExtra(Config.CURR_LOCATION_LONG, location.getLongitude());
                     setResult(Activity.RESULT_OK, returnIntent);
                     startActivity(returnIntent);
                     //finish();
-                    finishActivity(UserProfileActivity.GOOGLEMAP_REQUEST_CODE);
+                    finishActivity(UserProfileActivity.GOOGLEMAP_REQUEST_CODE);*/
+
+                    //Method 2:
+                    sendMessage(location);
+                    finish();
+                    break;
                 }
             }
-        });
+        }
     }
 
     @Override
@@ -87,6 +101,17 @@ public class CurrentLocationActivity extends AppCompatActivity {
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    private void sendMessage(Location location) {
+        Log.d(LogTag.USERPROFILE, "Broadcasting message - Location");
+        Intent intent = new Intent(Config.WK_LOCALBROADCAST_USERPROF);
+        Double lat = location.getLatitude();
+        Double longitude =location.getLongitude();
+        intent.putExtra(Config.CURR_LOCATION_LAT,lat);
+        intent.putExtra(Config.CURR_LOCATION_LONG,longitude);
+        intent.putExtra("Source",Config.USERPROF_TAG_LOCATION);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }
     /*@Override

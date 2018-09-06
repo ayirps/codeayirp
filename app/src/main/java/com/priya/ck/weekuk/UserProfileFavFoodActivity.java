@@ -2,9 +2,11 @@ package com.priya.ck.weekuk;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,8 +19,9 @@ import co.lujun.androidtagview.TagContainerLayout;
 import co.lujun.androidtagview.TagView;
 import helper.Config;
 import helper.HelpUtils;
+import helper.LogTag;
 
-public class UserProfileFavFoodActivity extends AppCompatActivity {
+public class UserProfileFavFoodActivity extends AppCompatActivity implements View.OnClickListener{
     private TagContainerLayout mTagContainerLayout1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +68,27 @@ public class UserProfileFavFoodActivity extends AppCompatActivity {
             }
         });
 
-        final EditText text = (EditText) findViewById(R.id.text_tagfood);
-        Button btnAddTag = (Button) findViewById(R.id.btn_add_tag_food);
-        btnAddTag.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        Button btnAddTag = (Button) findViewById(R.id.btn_add_tagfood);
+        btnAddTag.setOnClickListener(this);
+
+        Button btnDone = (Button) findViewById(R.id.btn_finishfood);
+        btnDone.setOnClickListener(this);
+    }
+
+    public void onClick(View view) {
+        Log.d(LogTag.USERPROFILE, "UserProfile:OnClick Start");
+        switch(view.getId()) {
+            case R.id.btn_finishfood:{
+                /*Intent returnIntent = new Intent(UserProfileFavFoodActivity.this, UserProfileActivity.class);
+                returnIntent.putExtra(Config.USERPROF_TAG_FAVFOODTAG, (ArrayList<String>) (mTagContainerLayout1.getTags()));
+                setResult(RESULT_OK,returnIntent);
+                startActivity(returnIntent);*/
+                sendMessage();
+                finish();
+                break;
+            }
+            case R.id.btn_add_tagfood:{
+                final EditText text = (EditText) findViewById(R.id.text_tagfood);
                 String toAddStr = text.getText().toString();
                 List<String> tagList = mTagContainerLayout1.getTags();
                 if (tagList.contains(toAddStr)) {
@@ -81,19 +100,19 @@ public class UserProfileFavFoodActivity extends AppCompatActivity {
                 }
                 mTagContainerLayout1.addTag(text.getText().toString());
                 text.setText("");
+                break;
             }
-        });
+        }
+    }
 
-        Button btnDone = (Button) findViewById(R.id.btn_finish_food);
-        btnDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent returnIntent = new Intent(UserProfileFavFoodActivity.this, UserProfileActivity.class);
-                returnIntent.putExtra(Config.USERPROF_TAG_FAVFOODTAG, (ArrayList<String>) (mTagContainerLayout1.getTags()));
-                setResult(RESULT_OK,returnIntent);
-                startActivity(returnIntent);
-                finishActivity(Config.REQCODE_USERPROF_FAVFOOD);
-            }
-        });
+    // Send an Intent with an action named "custom-event-name". The Intent sent should
+// be received by the ReceiverActivity.
+    private void sendMessage() {
+        Log.d(LogTag.USERPROFILE, "Broadcasting message - Favourite Foods");
+        Intent intent = new Intent(Config.WK_LOCALBROADCAST_USERPROF);
+        // You can also include some extra data.
+        intent.putExtra("Source",Config.USERPROF_TAG_FAVFOODTAG);
+        intent.putExtra(Config.USERPROF_TAG_FAVFOODTAG, (ArrayList<String>) (mTagContainerLayout1.getTags()));
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }

@@ -85,14 +85,16 @@ public class MainLoginActivity extends AppCompatActivity implements View.OnClick
     String mSessionId;
 
     private void getDeviceUUID() {
-        SharedPreferences mPreferences = getApplicationContext().getSharedPreferences(Config.WK_PREFS_NAME, Context.MODE_PRIVATE);
-        mSessionId = mPreferences.getString(Config.WK_PREFS_ID_VAL, null);
+        /*SharedPreferences mPreferences = getApplicationContext().getSharedPreferences(Config.WK_PREFS_NAME, Context.MODE_PRIVATE);
+        mSessionId = mPreferences.getString(Config.WK_PREFS_ID_VAL, null);*/
+        mSessionId = Config.getInstance().getSessionId(getApplicationContext());
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initial_login);
 
+        //Get Device UUID to be used as device token in all the Volley requests
         getDeviceUUID();
 
         // Initialize Firebase Auth

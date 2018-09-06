@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.priya.ck.weekuk.UserProfileFavFoodActivity"
-    android:background="@drawable/backgroundplain_image">
+    android:background="@drawable/backgroundplain_image"
+    tools:context="com.priya.ck.weekuk.UserProfileFavFoodActivity">
 
     <LinearLayout
         android:id="@+id/linearLayoutfood"
@@ -26,7 +26,7 @@
             android:singleLine="true" />
 
         <Button
-            android:id="@+id/btn_add_tag_food"
+            android:id="@+id/btn_add_tagfood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -71,7 +71,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_finish_food"
+        android:id="@+id/btn_finishfood"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -109,4 +109,3 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.545" />
 </android.support.constraint.ConstraintLayout>
-

@@ -1,8 +1,12 @@
 package com.priya.ck.weekuk;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,8 +15,10 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -53,6 +59,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import co.lujun.androidtagview.TagContainerLayout;
+import co.lujun.androidtagview.TagView;
 import helper.Config;
 import helper.HelpUtils;
 import helper.LogTag;
@@ -75,10 +83,11 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     String mKitchenPic="";
     String mHobbyStr ="";
     String mFavFoodStr ="";
-
+    private String mLocalAddress = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(LogTag.USERPROFILE, "UserProfile:OnCreate Start");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_user);
 
@@ -166,6 +175,16 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
         EditText et_favFood = findViewById(R.id.textView_userprof_favouritefood);
         et_favFood.setOnClickListener(this);
+
+        //Data will be broadcasted when user fills tags for Hobbies and FavouriteFood
+        listenForUserData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        // Unregister since the activity is about to be closed.
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        super.onDestroy();
     }
 
     @Override
@@ -206,6 +225,8 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             case R.id.textView_userprof_Hobbies:{
                 Intent intent = new Intent(UserProfileActivity.this,UserProfileHobbyActivity.class);
                 startActivityForResult(intent,Config.REQCODE_USERPROF_HOBBY);
+                // custom dialog
+                //showHobbyDialog();
                 break;
             }
             case R.id.textView_userprof_favouritefood:{
@@ -217,41 +238,21 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         Log.d(LogTag.USERPROFILE, "UserProfile:OnClick End");
     }
 
-    private void handleUserProfileSave(){
-        Log.d(LogTag.USERPROFILE, "UserProfile:handleUserProfileSave Start");
-        //1.Get the user entered name
-        EditText userNameET = (EditText) findViewById(R.id.et_userprofile_name);
-        mUserName = userNameET.getText().toString();
-        //Check if email field is empty
-        if (TextUtils.isEmpty(mUserName)) {
-            userNameET.setError(getResources().getString(R.string.alert_email));
-            userNameET.requestFocus();
-            return;
-        }
 
-        //3.Incase if user entered without choosing from googlemap
-        EditText locationET = (EditText) findViewById(R.id.editText_userprof_location);
-        mLocalAddress = locationET.getText().toString();
 
-        //2.Gender & 4.Distance
-        if(mGender.equals("") || (mUserDistanceSelection == 0)){
-            HelpUtils.showAlertMessageToUser(UserProfileActivity.this,getString(R.string.app_name),getString(R.string.txt_alert_user_response_err));
-            return;
-        }
-
-        sendDetailsToServer();
-        Log.d(LogTag.USERPROFILE, "UserProfile:handleUserProfileSave End");
-    }
-private String mLocalAddress = "";
-
-    @Override
+    /**
+     * Wait for call from another actitivity
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(LogTag.USERPROFILE, "UserProfile:onActivityResult Start");
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == GOOGLEMAP_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
-                Intent intent = data;
+                /*Intent intent = data;
                 //3.Location
                 intent.getDoubleExtra(Config.CURR_LOCATION_LAT,mLatitude);
                 intent.getDoubleExtra(Config.CURR_LOCATION_LONG,mLongitude);
@@ -273,15 +274,14 @@ private String mLocalAddress = "";
                 String state = addresses.get(0).getAdminArea();
                 String country = addresses.get(0).getCountryName();
                 String postalCode = addresses.get(0).getPostalCode();
-                EditText userNameET = (EditText) findViewById(R.id.editText_userprof_location);
+                EditText userNameLocationET = (EditText) findViewById(R.id.editText_userprof_location);
                 mLocalAddress = city + ','+ postalCode;
-                userNameET.setText(mLocalAddress);
+                userLocationET.setText(mLocalAddress);*/
             }
         }else  if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
             List<String> mPaths = (List<String>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_PATH);
             //call the method 'getImageFilePath(Intent data)' even if compression is set to false
             String filePath = mPaths.get(0);
-
             //TODO
             if (filePath != null) {//filePath will return null if compression is set to true
                 Bitmap selectedImage = BitmapFactory.decodeFile(filePath);
@@ -293,7 +293,7 @@ private String mLocalAddress = "";
                 byte[] imageBytes = baos.toByteArray();
                 mKitchenPic = Base64.encodeToString(imageBytes, Base64.DEFAULT);
             }
-        }else if(requestCode == Config.REQCODE_USERPROF_HOBBY && resultCode == RESULT_OK){
+        }/*else if(requestCode == Config.REQCODE_USERPROF_HOBBY && resultCode == RESULT_OK){
             Intent intent = data;
             ArrayList<String> hobbyTags = new ArrayList<String>();
             hobbyTags = intent.getStringArrayListExtra(Config.USERPROF_TAG_HOBBYTAG);
@@ -313,7 +313,7 @@ private String mLocalAddress = "";
                 mFavFoodStr.concat(favfoodTags.get(i));
                 mFavFoodStr.concat(",");
             }
-        }
+        }*/
         Log.d(LogTag.USERPROFILE, "UserProfile:onActivityResult End");
     }
 
@@ -454,4 +454,162 @@ private String mLocalAddress = "";
         Log.d(LogTag.VOLLEYREQTAG, "Request body: " + stringRequest);
         VolleyRequestHandlerSingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
+
+    private BroadcastReceiver mMessageReceiver;
+
+    /** Note!!!
+     * startActivityForResult seems to not work because OnActivityResult is never getting called.
+     * LocalBroadcastReceiver is created as a workaround for this problem.
+     *  of receving data from tag container
+     */
+    protected void listenForUserData(){
+        mMessageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // Get extra data included in the Intent
+                String messageSrc = intent.getStringExtra("Source");
+                Log.d(LogTag.USERPROFILE, "Got message: ");
+                if (messageSrc.equals(Config.USERPROF_TAG_HOBBYTAG)) {
+                    Log.d(LogTag.USERPROFILE, "Got message: Hobby ");
+                    ArrayList<String> hobbyTags = new ArrayList<String>();
+                    hobbyTags = intent.getStringArrayListExtra(Config.USERPROF_TAG_HOBBYTAG);
+                    int i = hobbyTags.size();
+                    while (i > 0) {
+                        i--;
+                        mHobbyStr.concat(hobbyTags.get(i));
+                        if(i>0)
+                            mHobbyStr.concat(",");
+                    }
+                    EditText editText_hobby = (EditText) findViewById(R.id.textView_userprof_Hobbies);
+                    editText_hobby.setText(mHobbyStr);
+                    
+                } else if (messageSrc.equals(Config.USERPROF_TAG_FAVFOODTAG)) {
+                    Log.d(LogTag.USERPROFILE, "Got message:FavFood ");
+                    ArrayList<String> favfoodTags = new ArrayList<String>();
+                    favfoodTags = intent.getStringArrayListExtra(Config.USERPROF_TAG_FAVFOODTAG);
+                    int i = favfoodTags.size();
+                    while (i >= 0) {
+                        i--;
+                        mFavFoodStr.concat(favfoodTags.get(i));
+                        mFavFoodStr.concat(",");
+                    }
+                    EditText editText_favFood = (EditText) findViewById(R.id.textView_userprof_favouritefood);
+                    editText_favFood.setText(mFavFoodStr);
+
+                }else if(messageSrc.equals(Config.USERPROF_TAG_LOCATION)){
+                    Log.d(LogTag.USERPROFILE, "Got message:Location ");
+                   /* intent.getDoubleExtra(Config.CURR_LOCATION_LAT,mLatitude);
+                    intent.getDoubleExtra(Config.CURR_LOCATION_LONG,mLongitude);*/
+                    Bundle extras = intent.getExtras();
+                    mLatitude = extras.getDouble(Config.CURR_LOCATION_LAT);
+                    mLongitude = extras.getDouble(Config.CURR_LOCATION_LONG);
+                    if((mLatitude== 0.0) || (mLongitude == 0.0)){
+                        HelpUtils.showAlertMessageToUser(UserProfileActivity.this,getString(R.string.app_name),getString(R.string.txt_label_operation_failed));
+                        return;
+                    }
+                    Geocoder geocoder;
+                    List<Address> addresses = null;
+                    geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                    try {
+                        addresses = geocoder.getFromLocation(mLatitude, mLongitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                    } catch (IOException e) {
+                        e.printStackTrace();                }
+
+                    String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                    String city = addresses.get(0).getLocality();
+                    String state = addresses.get(0).getAdminArea();
+                    String country = addresses.get(0).getCountryName();
+                    String postalCode = addresses.get(0).getPostalCode();
+                    EditText userLocationET = (EditText) findViewById(R.id.editText_userprof_location);
+                    mLocalAddress = city + ','+ postalCode;
+                    userLocationET.setText(mLocalAddress);
+                }
+            }
+        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter(Config.WK_LOCALBROADCAST_USERPROF));
+    }
+
+    private void handleUserProfileSave(){
+        Log.d(LogTag.USERPROFILE, "UserProfile:handleUserProfileSave Start");
+        //1.Get the user entered name
+        EditText userNameET = (EditText) findViewById(R.id.et_userprofile_name);
+        mUserName = userNameET.getText().toString();
+        //Check if email field is empty
+        if (TextUtils.isEmpty(mUserName)) {
+            userNameET.setError(getResources().getString(R.string.alert_email));
+            userNameET.requestFocus();
+            return;
+        }
+
+        //3.Incase if user entered without choosing from googlemap
+        EditText locationET = (EditText) findViewById(R.id.editText_userprof_location);
+        mLocalAddress = locationET.getText().toString();
+
+        //2.Gender & 4.Distance
+        if(mGender.equals("") || (mUserDistanceSelection == 0)){
+            HelpUtils.showAlertMessageToUser(UserProfileActivity.this,getString(R.string.app_name),getString(R.string.txt_alert_user_response_err));
+            return;
+        }
+
+        sendDetailsToServer();
+        Log.d(LogTag.USERPROFILE, "UserProfile:handleUserProfileSave End");
+    }
+
+    private TagContainerLayout mTagContainerLayout_hobby;
+
+    private void showHobbyDialog(){
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.activity_user_profile_hobby);
+
+        mTagContainerLayout_hobby = (TagContainerLayout) dialog.findViewById(R.id.tagcontainerLayout1);
+        // Set custom click listener
+        mTagContainerLayout_hobby.setOnTagClickListener(new TagView.OnTagClickListener() {
+            @Override
+            public void onTagClick(int position, String text) {
+                //Toast.makeText(UserProfileHobbyActivity.this, "click-position:" + position + ", text:" + text,
+                //Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onTagLongClick(final int position, String text) {
+                if (position < mTagContainerLayout_hobby.getChildCount()) {
+                    mTagContainerLayout_hobby.removeTag(position);
+                }
+            }
+            @Override
+            public void onTagCrossClick(int position) {
+                mTagContainerLayout_hobby.removeTag(position);
+            }
+        });
+
+        Button btnAddTag = (Button) dialog.findViewById(R.id.btn_add_tag);
+        btnAddTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final EditText text = (EditText) dialog.findViewById(R.id.text_tag);
+                String toAddStr = text.getText().toString();
+                List<String> tagList = mTagContainerLayout_hobby.getTags();
+                if (tagList.contains(toAddStr)) {
+                    HelpUtils.showAlertMessageToUser
+                            (UserProfileActivity.this, getString(R.string.app_name),
+                                    "Value exists already!");
+                    text.setText("");
+                    return;
+                }
+                mTagContainerLayout_hobby.addTag(text.getText().toString());
+                text.setText("");
+            }
+        });
+
+        Button btnDone = (Button) dialog.findViewById(R.id.btn_finish);
+        btnDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
 }
