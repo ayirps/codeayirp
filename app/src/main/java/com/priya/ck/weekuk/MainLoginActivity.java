@@ -33,9 +33,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -71,8 +73,10 @@ import java.util.Map;
 import helper.Config;
 import helper.HelpUtils;
 import helper.LogTag;
+import helper.PrefUtil;
 import helper.URLS;
 import helper.VolleyRequestHandlerSingleton;
+
 
 public class MainLoginActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
     private Button btnLoginEmail;
@@ -83,7 +87,7 @@ public class MainLoginActivity extends AppCompatActivity implements View.OnClick
     FirebaseDatabase mDatabase;
     User mUser;
     String mSessionId;
-
+    PrefUtil prefUtil;
     private void getDeviceUUID() {
         /*SharedPreferences mPreferences = getApplicationContext().getSharedPreferences(Config.WK_PREFS_NAME, Context.MODE_PRIVATE);
         mSessionId = mPreferences.getString(Config.WK_PREFS_ID_VAL, null);*/
@@ -113,6 +117,7 @@ public class MainLoginActivity extends AppCompatActivity implements View.OnClick
             public void onClick(View v) {
                 if (currentUser == null) { //do something
                 } else { //do something else }*/
+        prefUtil = new PrefUtil(MainLoginActivity.this);
         handleFacebookLogin();
 
         //Handle Gmail login option
@@ -179,6 +184,21 @@ public class MainLoginActivity extends AppCompatActivity implements View.OnClick
                 break;*/
         }
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // if user logged in with Facebook, stop tracking their token
+        if (mFacebookAccessTokenTracker != null) {
+            mFacebookAccessTokenTracker.stopTracking();
+        }
+
+        if(mAuth != null)
+            mAuth.signOut();
+
+        if(LoginManager.getInstance()!= null)
+            LoginManager.getInstance().logOut();
+    }
+
     @Override
     public void onBackPressed(){
         Intent a = new Intent(Intent.ACTION_MAIN);
@@ -312,7 +332,6 @@ public class MainLoginActivity extends AppCompatActivity implements View.OnClick
      * if error, display an alert to user
      */
     protected void handleAppLogin() {
-
         Log.d(LogTag.APPLOGIN, "Before posting request for login");
         //Get the user entered input details
         final EditText userEmail = (EditText) findViewById(R.id.txt_loginemail);
@@ -461,7 +480,7 @@ public class MainLoginActivity extends AppCompatActivity implements View.OnClick
         VolleyRequestHandlerSingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
-    private void updateUI(final FirebaseUser user) {
+    /*private void updateUI(final FirebaseUser user) {
         if(null != user){
             mDatabase.getReference("user").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -475,7 +494,7 @@ public class MainLoginActivity extends AppCompatActivity implements View.OnClick
                 }
             });
         }
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -508,22 +527,37 @@ public class MainLoginActivity extends AppCompatActivity implements View.OnClick
         Log.d(LogTag.GMAILLOGIN, "onConnectionFailed:" + connectionResult);
     }
 
+
+    /* Used to track user logging in/out off Facebook */
+    private AccessTokenTracker mFacebookAccessTokenTracker;
+
     /**
      * Hanlde FB login
      */
     protected void handleFacebookLogin(){
         Log.d(LogTag.FBLOGIN, "Start");
+
         mCallbackManager = CallbackManager.Factory.create();
 
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_fbbutton);
         loginButton.setReadPermissions(Arrays.asList(Config.FB_EMAIL));
         // If you are using in a fragment, call loginButton.setFragment(this);
 
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+
         // Callback registration
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(LogTag.FBLOGIN, "Logged In");
+
+                String accessToken = loginResult.getAccessToken().getToken();
+                // save accessToken to SharedPreference
+                prefUtil.saveAccessToken(accessToken,"fb");
+
                 // App code to fetch details on Successful FB login
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
@@ -537,9 +571,27 @@ public class MainLoginActivity extends AppCompatActivity implements View.OnClick
             public void onError(FacebookException exception) {
                 // App code
                 Log.d(LogTag.FBLOGIN, "Error in FB Login");
+                deleteAccessToken();
             }
         });
     }
+
+    private void deleteAccessToken() {
+        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(
+                    AccessToken oldAccessToken,
+                    AccessToken currentAccessToken) {
+
+                if (currentAccessToken == null){
+                    //User logged out
+                    prefUtil.clearToken();
+                    LoginManager.getInstance().logOut();
+                }
+            }
+        };
+    }
+
     // [START auth_with_facebook]
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(LogTag.FBLOGIN, "handleFacebookAccessToken:" + token);
@@ -676,6 +728,7 @@ public class MainLoginActivity extends AppCompatActivity implements View.OnClick
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(LogTag.GMAILLOGIN, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            prefUtil.saveAccessToken(user.getUid(),"google");
                             if(user != null)
                                 sendAndSaveGoogleSignDetails(user);
                             else

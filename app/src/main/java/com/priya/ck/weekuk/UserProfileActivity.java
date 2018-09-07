@@ -176,6 +176,8 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         EditText et_favFood = findViewById(R.id.textView_userprof_favouritefood);
         et_favFood.setOnClickListener(this);
 
+        Button btn_Save = findViewById(R.id.btn_userprofile_save);
+        btn_Save.setOnClickListener(this);
         //Data will be broadcasted when user fills tags for Hobbies and FavouriteFood
         listenForUserData();
     }
@@ -476,22 +478,24 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     int i = hobbyTags.size();
                     while (i > 0) {
                         i--;
-                        mHobbyStr.concat(hobbyTags.get(i));
+                        mHobbyStr += (hobbyTags.get(i));
                         if(i>0)
-                            mHobbyStr.concat(",");
+                            mHobbyStr += ",";
                     }
                     EditText editText_hobby = (EditText) findViewById(R.id.textView_userprof_Hobbies);
                     editText_hobby.setText(mHobbyStr);
-                    
+
                 } else if (messageSrc.equals(Config.USERPROF_TAG_FAVFOODTAG)) {
                     Log.d(LogTag.USERPROFILE, "Got message:FavFood ");
                     ArrayList<String> favfoodTags = new ArrayList<String>();
                     favfoodTags = intent.getStringArrayListExtra(Config.USERPROF_TAG_FAVFOODTAG);
                     int i = favfoodTags.size();
-                    while (i >= 0) {
+
+                    while (i > 0) {
                         i--;
-                        mFavFoodStr.concat(favfoodTags.get(i));
-                        mFavFoodStr.concat(",");
+                        mFavFoodStr += (favfoodTags.get(i));
+                        if(i>0)
+                            mFavFoodStr += ",";
                     }
                     EditText editText_favFood = (EditText) findViewById(R.id.textView_userprof_favouritefood);
                     editText_favFood.setText(mFavFoodStr);
@@ -536,19 +540,21 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         EditText userNameET = (EditText) findViewById(R.id.et_userprofile_name);
         mUserName = userNameET.getText().toString();
         //Check if email field is empty
-        if (TextUtils.isEmpty(mUserName)) {
+        /*if (TextUtils.isEmpty(mUserName)) {
             userNameET.setError(getResources().getString(R.string.alert_email));
             userNameET.requestFocus();
             return;
-        }
+        }*/
 
         //3.Incase if user entered without choosing from googlemap
         EditText locationET = (EditText) findViewById(R.id.editText_userprof_location);
         mLocalAddress = locationET.getText().toString();
 
         //2.Gender & 4.Distance
-        if(mGender.equals("") || (mUserDistanceSelection == 0)){
-            HelpUtils.showAlertMessageToUser(UserProfileActivity.this,getString(R.string.app_name),getString(R.string.txt_alert_user_response_err));
+        if(mUserName.equals("") ||mGender.equals("") || (mUserDistanceSelection == 0) || mLocalAddress.equals("")
+                || mFavFoodStr.equals("") || mHobbyStr.equals("")){
+            HelpUtils.showAlertMessageToUser(UserProfileActivity.this,
+                    getString(R.string.app_name),getString(R.string.txt_fill_operation_failed));
             return;
         }
 

@@ -71,4 +71,5 @@
     <string name="txt_label_favfood">FAVOURITE FOOD</string>
 
     <string name="txt_label_operation_failed">Action Failed!</string>
+    <string name="txt_fill_operation_failed">Please fill all the fields</string>
 </resources>
